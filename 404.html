@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Planos AGROFSIG</title></head>
+<body style="font-family:Arial,sans-serif;padding:24px">
+<p id="m">Abriendo plano...</p>
+<script>
+(async () => {
+  const p = decodeURIComponent(location.pathname);
+  if (/\.pdf$/i.test(p)) {
+    const base = p.replace(/(_\d+| \(\d+\)|\(\d+\))?\.pdf$/i, '');
+    const sufijos = ['', '_1', '_2', '_3', ' (1)', ' (2)', '(1)', '(2)'];
+    for (const s of sufijos) {
+      const u = base + s + '.pdf';
+      if (u === p) continue;
+      try { const r = await fetch(encodeURI(u), { method: 'HEAD' }); if (r.ok) { location.replace(encodeURI(u)); return; } } catch (e) {}
+    }
+  }
+  document.getElementById('m').textContent = 'Plano no encontrado. AGROFSIG - Tel. 4902 8746 / 3254 9194';
+})();
+</script></body></html>
