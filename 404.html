@@ -9,11 +9,12 @@
   if (/\.pdf$/i.test(p)) {
     const base = p.replace(/(_\d+| \(\d+\)|\(\d+\))?\.pdf$/i, '');
     const sufijos = [''];
-    for (let i = 1; i <= 30; i++) sufijos.push('_' + i, ' (' + i + ')', '(' + i + ')');
+    for (let i = 1; i <= 40; i++) sufijos.push('_' + i, ' (' + i + ')', '(' + i + ')');
     const pruebas = sufijos.map(s => base + s + '.pdf').filter(u => u !== p);
     const r = await Promise.all(pruebas.map(u => fetch(encodeURI(u), { method: 'HEAD' }).then(x => x.ok ? u : null).catch(() => null)));
-    const hallado = r.find(Boolean);
-    if (hallado) { location.replace(encodeURI(hallado)); return; }
+    const hallados = r.filter(Boolean);
+    // se abre la versión más reciente (la de número más alto)
+    if (hallados.length) { location.replace(encodeURI(hallados[hallados.length - 1])); return; }
   }
   document.getElementById('m').textContent = 'Plano no encontrado. AGROFSIG - Tel. 4902 8746 / 3254 9194';
 })();
